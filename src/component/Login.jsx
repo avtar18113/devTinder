@@ -1,17 +1,26 @@
 import { useState } from "react";
-import axios from "axios";
+import axios from "axios"; 
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utils/constant";
+
 
 const Login = () => {
-  const [emailId, setEmailId] = useState("");
-  const [password, setPassword] = useState("");
-
+  const [username, setusername] = useState("emilys");
+  const [password, setPassword] = useState('emilyspass');
+ const dispatch= useDispatch();
+ const navigate= useNavigate();
   const handleLogin = async () => {
+    
     try {
-      const res = await axios.post("http://localhost:777/login", {
-        emailId,
+      const res = await axios.post(BASE_URL, {
+        username,
         password,
       });
-      console.log(res);
+     
+      dispatch(addUser(res.data));
+      return navigate("/");
     } catch (err) {
       console.log(err);
     }
@@ -34,9 +43,9 @@ const Login = () => {
                 <input
                   type="text"
                   placeholder="Type here"
-                  value={emailId}
+                  value={username}
                   className="input input-bordered w-full max-w-xs"
-                  onChange={(e) => setEmailId(e.target.value)}
+                  onChange={(e) => setusername(e.target.value)}
                 />
               </label>
               <label className="form-control w-full max-w-xs">
